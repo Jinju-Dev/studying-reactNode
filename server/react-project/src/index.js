@@ -2,15 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import Header from './layout/Header';
-import Menu from './layout/Menu';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Header/>
-    <Menu/>
     <App/>
   </BrowserRouter>
 );

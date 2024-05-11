@@ -19,10 +19,10 @@ app.use(session({
     saveUninitialized: true, // 세션이 필요하기 전까지는 세션을 구동하지 않음(false일 경우 세션을 구동)
 }));
 
-
-
-app.listen(8080, () => {
-    console.log('listening on 8080');
+app.get('/authcheck', (req, res) => {
+    if (!!req.session.isLogined) {
+        res.send({'loginId': req.session.loginId});
+    }
 });
 
 // 회원가입
@@ -44,15 +44,19 @@ app.post('/checkMember', (req, res) => {
     connection.query(sql, param, (err, result) => {
         if (err) throw err;
         if (result.length > 0) { // 로그인 성공 
-            req.session.is_logined = true;
-            req.session.id = body.id;
+            req.session.isLogined = true;
+            req.session.loginId = body.id;
             res.send('login success');
         } else { // 로그인 실패
-            req.session.is_logined = false;
             res.send('login fail');
         }
     });
 });
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
+})
 
 // 게시판 조회
 app.get('/getBoardList', (req, res) => {
@@ -74,7 +78,11 @@ app.get('/getBoard/:seq', (req, res) => {
     })
 });
 
-// 리액트 라우터 사용(맨 위에 찍어야 로그가 찍히는 대신 화면에서 에러 발생)
+app.listen(8080, () => {
+    console.log('listening on 8080');
+});
+
+// 리액트 라우터 사용
 app.get('*', (req, res) => { 
     res.sendFile(path.join(__dirname, 'react-project/build/index.html')); 
 });

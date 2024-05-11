@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = (props) => {
     
+    const { reload, setReload } = props;
     const navigate = useNavigate();
 
     const checkMember = () => {
@@ -12,9 +13,9 @@ const Login = () => {
         axios.post('/checkMember', {id: memberId.value, pw: memberPw.value})
         .then((res) => {
             const data = res.data;
-            if (data.length === 'login success') {
-                console.log('로그인 성공');
-                navigate('/');
+            if (data === 'login success') {
+                setReload(!reload);
+                navigate(-1);
             } else {
                 memberId.value = '';
                 memberPw.value = '';

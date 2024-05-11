@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import BoardDto from '../dto/BoardDto'
+import Header from '../layout/Header';
 
-const BoardList = () => {
-
-    const [boardList, setBoardList] = useState([BoardDto]);
+const Board = (props) => {
+    
+    const { loginId } = props;
+    const [ boardList, setBoardList ] = useState([BoardDto]);
 
     const getBoardList = async () => {
-        const result = (await axios.get('/getBoardList'));
+        const result = await axios.get('/getBoardList');
         setBoardList(result.data);
     };
     
@@ -19,7 +21,7 @@ const BoardList = () => {
 
     return (
         <div>
-            <Link to="/BoardWrite" ><button>글쓰기</button></Link>
+            { !!loginId ? <Link to="/BoardWrite" ><button>글쓰기</button></Link> : '' }    
             <table>
                 <tr>
                     <th>번호</th>
@@ -42,4 +44,4 @@ const BoardList = () => {
     );
 };
 
-export default BoardList;
+export default Board;

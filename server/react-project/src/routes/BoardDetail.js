@@ -9,7 +9,7 @@ const BoardDetail = () => {
     const [ board, setBoard ] = useState(BoardDto);
 
     const getBoard = async () => {
-        const result = (await axios.get(`/getBoard/${seq}`));
+        const result = await axios.get(`/getBoard/${seq}`);
         setBoard(result.data[0]);
     };
 
