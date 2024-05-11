@@ -16,8 +16,8 @@ const App = () => {
   const [ reload, setReload ] = useState(false);
 
   const authCheck = async () => {
-    const result = (await axios.get('/authCheck'));
-    if (!!result.data.loginId) setLoginId(result.data.loginId);
+    const result = await axios.get('/authCheck');
+    if (result.data.isLogined) setLoginId(result.data.loginId);
   };
 
   useEffect(() => {

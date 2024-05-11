@@ -5,16 +5,16 @@ const Join = () => {
 
     const navigate = useNavigate();
 
-    const insertMember = () => {
+    const insertMember = async () => {
 
         const memberId = document.querySelector('#memberId');
         const memberPw = document.querySelector('#memberPw');
         const memberName = document.querySelector('#memberName');
         
-        axios.post('/insertMember', {id: memberId.value, pw: memberPw.value, name: memberName.value})
+        await axios.post('/insertMember', {id: memberId.value, pw: memberPw.value, name: memberName.value})
         .then((res) => {
             alert('회원가입 완료.');
-            navigate('/');
+            navigate(-1);
         })
         .catch((err) => {
             console.log(err);

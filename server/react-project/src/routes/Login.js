@@ -6,11 +6,11 @@ const Login = (props) => {
     const { reload, setReload } = props;
     const navigate = useNavigate();
 
-    const checkMember = () => {
+    const checkMember = async () => {
         const memberId = document.querySelector('#memberId');
         const memberPw = document.querySelector('#memberPw');
         
-        axios.post('/checkMember', {id: memberId.value, pw: memberPw.value})
+        await axios.post('/checkMember', {id: memberId.value, pw: memberPw.value})
         .then((res) => {
             const data = res.data;
             if (data === 'login success') {
