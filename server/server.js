@@ -3,6 +3,7 @@ import mysql from 'mysql';
 import db from './config/database.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import session from 'express-session';
 
 const app = express();
 const connection = mysql.createConnection(db);
@@ -11,6 +12,14 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'react-project/build')));
 app.use(express.json()); // post 요청 시 body로 받을 때 추가해주어야한다.
+app.use(session({
+    secure: true, // 보안을 위한 https으로 통신하기 위해 추가
+    secret: 'keyboard cat', // id 값 
+    resave: false, // 세션 데이터가 변화가 있을 때에만 저장(true일 경우 계속 저장)
+    saveUninitialized: true, // 세션이 필요하기 전까지는 세션을 구동하지 않음(false일 경우 세션을 구동)
+}));
+
+
 
 app.listen(8080, () => {
     console.log('listening on 8080');
@@ -34,7 +43,14 @@ app.post('/checkMember', (req, res) => {
     const param = [body.id, body.pw];
     connection.query(sql, param, (err, result) => {
         if (err) throw err;
-        res.json(result);
+        if (result.length > 0) { // 로그인 성공 
+            req.session.is_logined = true;
+            req.session.id = body.id;
+            res.send('login success');
+        } else { // 로그인 실패
+            req.session.is_logined = false;
+            res.send('login fail');
+        }
     });
 });
 
@@ -58,7 +74,7 @@ app.get('/getBoard/:seq', (req, res) => {
     })
 });
 
-// 리액트 라우터 사용(최하단에 작성)
+// 리액트 라우터 사용(맨 위에 찍어야 로그가 찍히는 대신 화면에서 에러 발생)
 app.get('*', (req, res) => { 
     res.sendFile(path.join(__dirname, 'react-project/build/index.html')); 
 });
