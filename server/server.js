@@ -19,6 +19,18 @@ app.use(session({
     saveUninitialized: true, // 세션이 필요하기 전까지는 세션을 구동하지 않음(false일 경우 세션을 구동)
 }));
 
+// 인터셉터 처리
+app.use((req, res, next) => {
+    const { url } = req;
+    const requiredLoginUrl = ['BoardNew','BoardEdit', 'writeBoard', 'deleteBoard', 'editBoard'];
+    if (requiredLoginUrl.includes(url.split('/')[1])) {
+        console.log('denied');
+        if (!req.session.isLogined) res.redirect('/Login');
+    } else {
+        next(); // 요청한 url로 이동
+    }
+})
+
 app.get('/authcheck', (req, res) => {
     if (!!req.session.isLogined) {
         res.send({
@@ -107,6 +119,7 @@ app.get('/deleteBoard', (req, res) => {
     })
 });
 
+// 게시글 수정
 app.post('/editBoard', (req, res) => {
     const { body } = req;
     const sql = `update board set title = ?, content = ? where seq = ?`;
