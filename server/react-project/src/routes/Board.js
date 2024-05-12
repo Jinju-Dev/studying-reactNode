@@ -9,6 +9,7 @@ const Board = (props) => {
     const [ boardList, setBoardList ] = useState([BoardDto]);
 
     const getBoardList = async () => {
+
         const result = await axios.get('/getBoardList');
         setBoardList(result.data);
     };
@@ -20,7 +21,7 @@ const Board = (props) => {
 
     return (
         <div>
-            { !!loginId ? <Link to="/BoardWrite" ><button>글쓰기</button></Link> : '' }    
+            { !!loginId ? <Link to="/BoardNew" ><button>글쓰기</button></Link> : '' }    
             <table>
                 <tr>
                     <th>번호</th>

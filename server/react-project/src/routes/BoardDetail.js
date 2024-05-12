@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import BoardDto from "../dto/BoardDto";
@@ -11,15 +11,13 @@ const BoardDetail = (props) => {
     const [ board, setBoard ] = useState(BoardDto);
 
     const getBoard = async () => {
+        
         const result = await axios.get(`/getBoard/${seq}`);
         setBoard(result.data[0]);
     };
 
-    const updateBoard = () => {
-
-    };
-
     const deleteBoard = async () => {
+
         const result = await axios.get('/deleteBoard', {params: {seq: board.seq}}, {withCredentials: true});
         if (result.data === 'delete success') {
             navigate('/board');
@@ -35,7 +33,7 @@ const BoardDetail = (props) => {
     return (
         <div>
             { loginId === board.writer 
-                ? (<><button onClick={ updateBoard }>수정</button><button onClick={ deleteBoard }>삭제</button></>)
+                ? (<><button><Link to={`/BoardEdit/${board.seq}`}>수정</Link></button><button onClick={ deleteBoard }>삭제</button></>)
                 : ''
             }
             <div>글번호: { board.seq }</div>

@@ -7,6 +7,7 @@ const Login = (props) => {
     const navigate = useNavigate();
 
     const checkMember = async () => {
+        
         const memberId = document.querySelector('#memberId');
         const memberPw = document.querySelector('#memberPw');
         

@@ -8,7 +8,8 @@ import Join from './routes/Join';
 import Login from './routes/Login';
 import Board from './routes/Board';
 import BoardDetail from './routes/BoardDetail';
-import BoardWrite from './routes/BoardWrite';
+import BoardNew from './routes/BoardNew';
+import BoardEdit from './routes/BoardEdit';
 
 const App = () => {
 
@@ -16,6 +17,7 @@ const App = () => {
   const [ reload, setReload ] = useState(false);
 
   const authCheck = async () => {
+    
     const result = await axios.get('/authCheck');
     if (result.data.isLogined) setLoginId(result.data.loginId);
   };
@@ -34,7 +36,8 @@ const App = () => {
           <Route path="/Login" element={<Login reload={reload} setReload={setReload}/>}></Route>
           <Route path="/Board" element={<Board loginId={loginId}/>}></Route>
           <Route path="/Board/:seq" element={<BoardDetail loginId={loginId}/>}></Route>
-          <Route path="/BoardWrite" element={<BoardWrite />}></Route>
+          <Route path="/BoardNew" element={<BoardNew />}></Route>
+          <Route path="/BoardEdit/:seq" element={<BoardEdit />}></Route>
       </Routes>
     </>
   );

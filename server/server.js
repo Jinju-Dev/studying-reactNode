@@ -107,6 +107,16 @@ app.get('/deleteBoard', (req, res) => {
     })
 });
 
+app.post('/editBoard', (req, res) => {
+    const { body } = req;
+    const sql = `update board set title = ?, content = ? where seq = ?`;
+    const param = [body.title, body.content, body.seq];
+    connection.query(sql, param, (err, result) => {
+        if (err) throw err;
+        res.send('edit success');
+    });
+})
+
 app.listen(8080, () => {
     console.log('listening on 8080');
 });

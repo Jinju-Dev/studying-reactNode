@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Header = (props) => {
+    
     const { loginId, setLoginId } = props;
 
     const logout = async () => {
+
         await axios.get('/logout');
         setLoginId('');
     };
