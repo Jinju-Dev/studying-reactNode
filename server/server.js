@@ -20,15 +20,8 @@ app.use(session({
 }));
 
 // 인터셉터 처리
-app.use((req, res, next) => {
-    const { url } = req;
-    const requiredLoginUrl = ['BoardNew','BoardEdit', 'writeBoard', 'deleteBoard', 'editBoard'];
-    if (requiredLoginUrl.includes(url.split('/')[1])) {
-        console.log('denied');
-        if (!req.session.isLogined) res.redirect('/Login');
-    } else {
-        next(); // 요청한 url로 이동
-    }
+app.use(['/BoardNew','/BoardEdit:seq', '/writeBoard', '/deleteBoard', '/editBoard'], (req, res) => {
+    if (!req.session.isLogined) res.redirect('/Login');
 })
 
 app.get('/authcheck', (req, res) => {
