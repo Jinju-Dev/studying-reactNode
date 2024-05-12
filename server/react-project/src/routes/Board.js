@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import BoardDto from '../dto/BoardDto'
-import Header from '../layout/Header';
 
 const Board = (props) => {
     

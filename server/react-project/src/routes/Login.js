@@ -12,7 +12,7 @@ const Login = (props) => {
         
         await axios.post('/checkMember', {id: memberId.value, pw: memberPw.value})
         .then((res) => {
-            const data = res.data;
+            const { data } = res;
             if (data === 'login success') {
                 setReload(!reload);
                 navigate(-1);

@@ -33,7 +33,7 @@ const App = () => {
           <Route path="/Join" element={<Join />}></Route>
           <Route path="/Login" element={<Login reload={reload} setReload={setReload}/>}></Route>
           <Route path="/Board" element={<Board loginId={loginId}/>}></Route>
-          <Route path="/Board/:seq" element={<BoardDetail />}></Route>
+          <Route path="/Board/:seq" element={<BoardDetail loginId={loginId}/>}></Route>
           <Route path="/BoardWrite" element={<BoardWrite />}></Route>
       </Routes>
     </>

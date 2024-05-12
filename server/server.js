@@ -20,14 +20,11 @@ app.use(session({
 }));
 
 app.get('/authcheck', (req, res) => {
-    console.log('>>>>authcheck');
     if (!!req.session.isLogined) {
-        console.log('>>>>authcheck result');
         res.send({
             'isLogined': req.session.isLogined,
             'loginId': req.session.loginId
         });
-        console.log('>>>>authcheck result send');
     } else {
         res.send({
             'isLogined': req.session.isLogined
@@ -37,7 +34,7 @@ app.get('/authcheck', (req, res) => {
 
 // 회원가입
 app.post('/insertMember', (req, res) => {
-    const body = req.body;
+    const { body } = req;
     const sql = `insert into member(id, pw, name) values (?, ?, ?)`;
     const param = [body.id, body.pw, body.name]
     connection.query(sql, param, (err, result) => {
@@ -48,8 +45,7 @@ app.post('/insertMember', (req, res) => {
 
 // 로그인
 app.post('/checkMember', (req, res) => {
-    console.log('>>>>checkMember');
-    const body = req.body;
+    const { body } = req;
     const sql = `select id from member where id = ? and pw = ?`;
     const param = [body.id, body.pw];
     connection.query(sql, param, (err, result) => {
@@ -57,23 +53,16 @@ app.post('/checkMember', (req, res) => {
         if (result.length > 0) { // 로그인 성공 
             req.session.isLogined = true;
             req.session.loginId = body.id;
-            console.log('>>>>checkMember result');
             res.send('login success');
-            console.log('>>>>checkMember result send');
         } else { // 로그인 실패
-            console.log('>>>>checkMember result');
             res.send('login fail');
-            console.log('>>>>checkMember result send');
         }
     });
 });
 
 app.get('/logout', (req, res) => {
-    console.log('>>>>logout');
     req.session.destroy();
-    console.log('>>>>logout result');
     res.send('logout');
-    console.log('>>>>logout result send');
 })
 
 // 게시판 조회
@@ -87,12 +76,34 @@ app.get('/getBoardList', (req, res) => {
 
 // 게시글 조회
 app.get('/getBoard/:seq', (req, res) => {
-    const params = req.params;
+    const { params } = req;
     const sql = `select * from board where seq = ?`;
     const param = [params.seq];
     connection.query(sql, param, (err, result) => {
         if (err) throw err;
         res.send(result);
+    })
+});
+
+// 게시글 작성
+app.post('/writeBoard', (req, res) => {
+    const { body } = req;
+    const sql = `insert into board(title, content, writer) values (?, ?, ?)`;
+    const param = [body.title, body.content, req.session.loginId];
+    connection.query(sql, param, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+})
+
+// 게시글 삭제
+app.get('/deleteBoard', (req, res) => {
+    const params = req.query;
+    const sql = `delete from board where seq = ?`;
+    const param = [params.seq];
+    connection.query(sql, param, (err, result) => {
+        if (err) throw err;
+        res.send('delete success');
     })
 });
 
